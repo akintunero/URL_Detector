@@ -4,6 +4,13 @@ import joblib
 import re
 import os
 
+import sklearn.tree
+
+# 🔧 Fix missing attribute error (temporary but easy)
+if not hasattr(sklearn.tree.DecisionTreeClassifier, "monotonic_cst"):
+    sklearn.tree.DecisionTreeClassifier.monotonic_cst = None
+
+
 # --- Load trained model ---
 model_path = "model/model.pkl"
 
@@ -55,8 +62,8 @@ if st.button("Predict"):
             st.success(f"🟢 Safe URL: {url}")
 
         # Optional: show extracted features
-        st.subheader("🔍 Extracted Features")
-        st.dataframe(input_features)
+      #  st.subheader("🔍 Extracted Features")
+      #  st.dataframe(input_features)
     else:
         st.warning("Please enter a URL to check.")
 
