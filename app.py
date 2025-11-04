@@ -3,13 +3,11 @@ import pandas as pd
 import joblib
 import re
 import os
-
 import sklearn.tree
 
-# 🔧 Fix missing attribute error (temporary but easy)
+# 🔧 Temporary fix for missing 'monotonic_cst' attribute in DecisionTreeClassifier
 if not hasattr(sklearn.tree.DecisionTreeClassifier, "monotonic_cst"):
     sklearn.tree.DecisionTreeClassifier.monotonic_cst = None
-
 
 # --- Load trained model ---
 model_path = "model/model.pkl"
@@ -27,7 +25,6 @@ st.write("Enter a URL to check if it’s **Safe** or **Phishing** using a traine
 # --- Feature Extraction Function ---
 def extract_features(url):
     features = {}
-
     features['Have_IP'] = 1 if re.search(r'\b\d{1,3}(?:\.\d{1,3}){3}\b', url) else 0
     features['Have_At'] = 1 if '@' in url else 0
     features['URL_Length'] = len(url)
@@ -45,7 +42,6 @@ def extract_features(url):
     features['Mouse_Over'] = 0
     features['Right_Click'] = 0
     features['Web_Forwards'] = 1 if url.count('//') > 2 else 0
-
     return pd.DataFrame([features])
 
 # --- Streamlit UI ---
@@ -62,8 +58,8 @@ if st.button("Predict"):
             st.success(f"🟢 Safe URL: {url}")
 
         # Optional: show extracted features
-      #  st.subheader("🔍 Extracted Features")
-      #  st.dataframe(input_features)
+        # st.subheader("🔍 Extracted Features")
+        # st.dataframe(input_features)
     else:
         st.warning("Please enter a URL to check.")
 
@@ -72,5 +68,8 @@ st.markdown("---")
 st.subheader("💬 Share Your Feedback")
 st.write("We’d love to hear from you! Tell us what you think about this Phishing URL Detector.")
 
-# Embed your Google Form link here 👇
-st.markdown("[👉 Click here to fill out the feedback form](https://docs.google.com/forms/d/e/1FAIpQLSeeW_J3U_xrOnBXnoQvSQFCoBw7o74LvffmJ1VW33leHEy5GQ/viewform?usp=publish-editor)", unsafe_allow_html=True)
+# Embed your Google Form link
+st.markdown(
+    "[👉 Click here to fill out the feedback form](https://docs.google.com/forms/d/e/1FAIpQLSeeW_J3U_xrOnBXnoQvSQFCoBw7o74LvffmJ1VW33leHEy5GQ/viewform?usp=publish-editor)",
+    unsafe_allow_html=True
+)
